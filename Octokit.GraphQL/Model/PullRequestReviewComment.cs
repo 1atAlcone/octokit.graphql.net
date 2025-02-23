@@ -31,7 +31,7 @@ namespace Octokit.GraphQL.Model
         public string Body { get; }
 
         /// <summary>
-        /// The comment body of this review comment rendered to HTML.
+        /// The body rendered to HTML.
         /// </summary>
         public string BodyHTML { get; }
 
@@ -58,6 +58,7 @@ namespace Octokit.GraphQL.Model
         /// <summary>
         /// Identifies the primary key from the database.
         /// </summary>
+        [Obsolete(@"`databaseId` will be removed because it does not support 64-bit signed integer identifiers. Use `fullDatabaseId` instead. Removal on 2024-07-01 UTC.")]
         public int? DatabaseId { get; }
 
         /// <summary>
@@ -75,6 +76,14 @@ namespace Octokit.GraphQL.Model
         /// </summary>
         public IActor Editor => this.CreateProperty(x => x.Editor, Octokit.GraphQL.Model.Internal.StubIActor.Create);
 
+        /// <summary>
+        /// Identifies the primary key from the database as a BigInt.
+        /// </summary>
+        public string FullDatabaseId { get; }
+
+        /// <summary>
+        /// The Node ID of the PullRequestReviewComment object
+        /// </summary>
         public ID Id { get; }
 
         /// <summary>
@@ -93,7 +102,12 @@ namespace Octokit.GraphQL.Model
         public DateTimeOffset? LastEditedAt { get; }
 
         /// <summary>
-        /// Returns why the comment was minimized.
+        /// The end line number on the file to which the comment applies
+        /// </summary>
+        public int? Line { get; }
+
+        /// <summary>
+        /// Returns why the comment was minimized. One of `abuse`, `off-topic`, `outdated`, `resolved`, `duplicate` and `spam`. Note that the case and formatting of these values differs from the inputs to the `MinimizeComment` mutation.
         /// </summary>
         public string MinimizedReason { get; }
 
@@ -103,9 +117,20 @@ namespace Octokit.GraphQL.Model
         public Commit OriginalCommit => this.CreateProperty(x => x.OriginalCommit, Octokit.GraphQL.Model.Commit.Create);
 
         /// <summary>
+        /// The end line number on the file to which the comment applied when it was first created
+        /// </summary>
+        public int? OriginalLine { get; }
+
+        /// <summary>
         /// The original line index in the diff to which the comment applies.
         /// </summary>
+        [Obsolete(@"We are phasing out diff-relative positioning for PR comments Removal on 2023-10-01 UTC.")]
         public int OriginalPosition { get; }
+
+        /// <summary>
+        /// The start line number on the file to which the comment applied when it was first created
+        /// </summary>
+        public int? OriginalStartLine { get; }
 
         /// <summary>
         /// Identifies when the comment body is outdated
@@ -120,6 +145,7 @@ namespace Octokit.GraphQL.Model
         /// <summary>
         /// The line index in the diff to which the comment applies.
         /// </summary>
+        [Obsolete(@"We are phasing out diff-relative positioning for PR comments Use the `line` and `startLine` fields instead, which are file line numbers instead of diff line numbers Removal on 2023-10-01 UTC.")]
         public int? Position { get; }
 
         /// <summary>
@@ -169,9 +195,19 @@ namespace Octokit.GraphQL.Model
         public string ResourcePath { get; }
 
         /// <summary>
+        /// The start line number on the file to which the comment applies
+        /// </summary>
+        public int? StartLine { get; }
+
+        /// <summary>
         /// Identifies the state of the comment.
         /// </summary>
         public PullRequestReviewCommentState State { get; }
+
+        /// <summary>
+        /// The level at which the comments in the corresponding thread are targeted, can be a diff line or a file
+        /// </summary>
+        public PullRequestReviewThreadSubjectType SubjectType { get; }
 
         /// <summary>
         /// Identifies when the comment was last updated.

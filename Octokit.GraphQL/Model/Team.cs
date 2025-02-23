@@ -53,9 +53,41 @@ namespace Octokit.GraphQL.Model
         public DateTimeOffset CreatedAt { get; }
 
         /// <summary>
+        /// Identifies the primary key from the database.
+        /// </summary>
+        public int? DatabaseId { get; }
+
+        /// <summary>
         /// The description of the team.
         /// </summary>
         public string Description { get; }
+
+        /// <summary>
+        /// Find a team discussion by its number.
+        /// </summary>
+        /// <param name="number">The sequence number of the discussion to find.</param>
+        public TeamDiscussion Discussion(Arg<int> number) => this.CreateMethodCall(x => x.Discussion(number), Octokit.GraphQL.Model.TeamDiscussion.Create);
+
+        /// <summary>
+        /// A list of team discussions.
+        /// </summary>
+        /// <param name="first">Returns the first _n_ elements from the list.</param>
+        /// <param name="after">Returns the elements in the list that come after the specified cursor.</param>
+        /// <param name="last">Returns the last _n_ elements from the list.</param>
+        /// <param name="before">Returns the elements in the list that come before the specified cursor.</param>
+        /// <param name="isPinned">If provided, filters discussions according to whether or not they are pinned.</param>
+        /// <param name="orderBy">Order for connection</param>
+        public TeamDiscussionConnection Discussions(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null, Arg<bool>? isPinned = null, Arg<TeamDiscussionOrder>? orderBy = null) => this.CreateMethodCall(x => x.Discussions(first, after, last, before, isPinned, orderBy), Octokit.GraphQL.Model.TeamDiscussionConnection.Create);
+
+        /// <summary>
+        /// The HTTP path for team discussions
+        /// </summary>
+        public string DiscussionsResourcePath { get; }
+
+        /// <summary>
+        /// The HTTP URL for team discussions
+        /// </summary>
+        public string DiscussionsUrl { get; }
 
         /// <summary>
         /// The HTTP path for editing this team
@@ -67,6 +99,9 @@ namespace Octokit.GraphQL.Model
         /// </summary>
         public string EditTeamUrl { get; }
 
+        /// <summary>
+        /// The Node ID of the Team object
+        /// </summary>
         public ID Id { get; }
 
         /// <summary>
@@ -77,6 +112,16 @@ namespace Octokit.GraphQL.Model
         /// <param name="last">Returns the last _n_ elements from the list.</param>
         /// <param name="before">Returns the elements in the list that come before the specified cursor.</param>
         public OrganizationInvitationConnection Invitations(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null) => this.CreateMethodCall(x => x.Invitations(first, after, last, before), Octokit.GraphQL.Model.OrganizationInvitationConnection.Create);
+
+        /// <summary>
+        /// Get the status messages members of this entity have set that are either public or visible only to the organization.
+        /// </summary>
+        /// <param name="first">Returns the first _n_ elements from the list.</param>
+        /// <param name="after">Returns the elements in the list that come after the specified cursor.</param>
+        /// <param name="last">Returns the last _n_ elements from the list.</param>
+        /// <param name="before">Returns the elements in the list that come before the specified cursor.</param>
+        /// <param name="orderBy">Ordering options for user statuses returned from the connection.</param>
+        public UserStatusConnection MemberStatuses(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null, Arg<UserStatusOrder>? orderBy = null) => this.CreateMethodCall(x => x.MemberStatuses(first, after, last, before, orderBy), Octokit.GraphQL.Model.UserStatusConnection.Create);
 
         /// <summary>
         /// A list of users who are members of this team.
@@ -117,6 +162,11 @@ namespace Octokit.GraphQL.Model
         public string NewTeamUrl { get; }
 
         /// <summary>
+        /// The notification setting that the team has set.
+        /// </summary>
+        public TeamNotificationSetting NotificationSetting { get; }
+
+        /// <summary>
         /// The organization that owns this team.
         /// </summary>
         public Organization Organization => this.CreateProperty(x => x.Organization, Octokit.GraphQL.Model.Organization.Create);
@@ -132,6 +182,24 @@ namespace Octokit.GraphQL.Model
         public TeamPrivacy Privacy { get; }
 
         /// <summary>
+        /// Finds and returns the project according to the provided project number.
+        /// </summary>
+        /// <param name="number">The Project number.</param>
+        public ProjectV2 ProjectV2(Arg<int> number) => this.CreateMethodCall(x => x.ProjectV2(number), Octokit.GraphQL.Model.ProjectV2.Create);
+
+        /// <summary>
+        /// List of projects this team has collaborator access to.
+        /// </summary>
+        /// <param name="first">Returns the first _n_ elements from the list.</param>
+        /// <param name="after">Returns the elements in the list that come after the specified cursor.</param>
+        /// <param name="last">Returns the last _n_ elements from the list.</param>
+        /// <param name="before">Returns the elements in the list that come before the specified cursor.</param>
+        /// <param name="filterBy">Filtering options for projects returned from this connection</param>
+        /// <param name="orderBy">How to order the returned projects.</param>
+        /// <param name="query">The query to search projects by.</param>
+        public ProjectV2Connection ProjectsV2(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null, Arg<ProjectV2Filters>? filterBy = null, Arg<ProjectV2Order>? orderBy = null, Arg<string>? query = null) => this.CreateMethodCall(x => x.ProjectsV2(first, after, last, before, filterBy, orderBy, query), Octokit.GraphQL.Model.ProjectV2Connection.Create);
+
+        /// <summary>
         /// A list of repositories this team has access to.
         /// </summary>
         /// <param name="first">Returns the first _n_ elements from the list.</param>
@@ -139,7 +207,7 @@ namespace Octokit.GraphQL.Model
         /// <param name="last">Returns the last _n_ elements from the list.</param>
         /// <param name="before">Returns the elements in the list that come before the specified cursor.</param>
         /// <param name="orderBy">Order for the connection.</param>
-        /// <param name="query">The search string to look for.</param>
+        /// <param name="query">The search string to look for. Repositories will be returned where the name contains your search string.</param>
         public TeamRepositoryConnection Repositories(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null, Arg<TeamRepositoryOrder>? orderBy = null, Arg<string>? query = null) => this.CreateMethodCall(x => x.Repositories(first, after, last, before, orderBy, query), Octokit.GraphQL.Model.TeamRepositoryConnection.Create);
 
         /// <summary>

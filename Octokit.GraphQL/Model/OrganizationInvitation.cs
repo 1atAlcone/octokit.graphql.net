@@ -25,7 +25,15 @@ namespace Octokit.GraphQL.Model
         /// </summary>
         public string Email { get; }
 
+        /// <summary>
+        /// The Node ID of the OrganizationInvitation object
+        /// </summary>
         public ID Id { get; }
+
+        /// <summary>
+        /// The source of the invitation.
+        /// </summary>
+        public OrganizationInvitationSource InvitationSource { get; }
 
         /// <summary>
         /// The type of invitation that was sent (e.g. email, user).
@@ -40,7 +48,13 @@ namespace Octokit.GraphQL.Model
         /// <summary>
         /// The user who created the invitation.
         /// </summary>
+        [Obsolete(@"`inviter` will be removed. `inviter` will be replaced by `inviterActor`. Removal on 2024-07-01 UTC.")]
         public User Inviter => this.CreateProperty(x => x.Inviter, Octokit.GraphQL.Model.User.Create);
+
+        /// <summary>
+        /// The user who created the invitation.
+        /// </summary>
+        public User InviterActor => this.CreateProperty(x => x.InviterActor, Octokit.GraphQL.Model.User.Create);
 
         /// <summary>
         /// The organization the invite is for

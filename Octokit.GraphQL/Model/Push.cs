@@ -15,6 +15,9 @@ namespace Octokit.GraphQL.Model
         {
         }
 
+        /// <summary>
+        /// The Node ID of the Push object
+        /// </summary>
         public ID Id { get; }
 
         /// <summary>
@@ -33,9 +36,9 @@ namespace Octokit.GraphQL.Model
         public string PreviousSha { get; }
 
         /// <summary>
-        /// The user who pushed
+        /// The actor who pushed
         /// </summary>
-        public User Pusher => this.CreateProperty(x => x.Pusher, Octokit.GraphQL.Model.User.Create);
+        public IActor Pusher => this.CreateProperty(x => x.Pusher, Octokit.GraphQL.Model.Internal.StubIActor.Create);
 
         /// <summary>
         /// The repository that was pushed to

@@ -36,6 +36,12 @@ namespace Octokit.GraphQL.Model
         Outdated,
 
         /// <summary>
+        /// A duplicated piece of content
+        /// </summary>
+        [EnumMember(Value = "DUPLICATE")]
+        Duplicate,
+
+        /// <summary>
         /// The content has been resolved
         /// </summary>
         [EnumMember(Value = "RESOLVED")]

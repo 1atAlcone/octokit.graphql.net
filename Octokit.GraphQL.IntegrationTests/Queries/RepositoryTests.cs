@@ -50,9 +50,9 @@ namespace Octokit.GraphQL.IntegrationTests.Queries
                 { "name", "octokit.graphql.net" },
             };
 
-            var result = Connection.Run(query, vars).Result;
-            Assert.Equal(result.Login, "octokit");
-            Assert.Equal(result.Name, "octokit.graphql.net");
+            var result = await Connection.Run(query, vars);
+            Assert.Equal("octokit", result.Login);
+            Assert.Equal("octokit.graphql.net", result.Name);
         }
 
         [IntegrationTest]
@@ -69,8 +69,8 @@ namespace Octokit.GraphQL.IntegrationTests.Queries
             var repository = await Connection.Run(query);
 
             Assert.NotNull(repository);
-            Assert.Equal(repository.Name, "octokit.net");
-            Assert.Equal(repository.DatabaseId, 7528679);
+            Assert.Equal("octokit.net", repository.Name);
+            Assert.Equal(7528679, repository.DatabaseId);
         }
 
         [IntegrationTest]
@@ -86,11 +86,11 @@ namespace Octokit.GraphQL.IntegrationTests.Queries
 
             var repositoryNames = (await Connection.Run(query)).ToArray();
 
-            Assert.Contains("discussions", repositoryNames);
-            Assert.Contains("go-octokit", repositoryNames);
-            Assert.Contains("octokit.net", repositoryNames);
-            Assert.Contains("octokit.objc", repositoryNames);
-            Assert.Contains("octokit.rb", repositoryNames);
+            Assert.Contains(".github", repositoryNames);
+            Assert.Contains("action.js", repositoryNames);
+            Assert.Contains("app-permissions", repositoryNames);
+            Assert.Contains("app.js", repositoryNames);
+            Assert.Contains("auth-action.js", repositoryNames);
         }
 
         [IntegrationTest]
@@ -153,7 +153,7 @@ namespace Octokit.GraphQL.IntegrationTests.Queries
             var query = new Query()
                 .Select(q => new
                 {
-                    Name = q.Repository("octokit.net", "octokit").Select(fragment).SingleOrDefault()
+                    Name = q.Repository("octokit.net", "octokit", null).Select(fragment).SingleOrDefault()
                 });
 
 
@@ -175,7 +175,7 @@ namespace Octokit.GraphQL.IntegrationTests.Queries
 
             var repositoryName = (await Connection.Run(query)).OrderByDescending(s => s).First();
 
-            Assert.Equal("webhooks.js", repositoryName);
+            Assert.Equal("webhooks.net", repositoryName);
         }
 
         [IntegrationTest]
@@ -210,8 +210,8 @@ namespace Octokit.GraphQL.IntegrationTests.Queries
             var query = new Query()
                 .Select(q => new
                 {
-                    repo1 = q.Repository("octokit.net", "octokit").Select(fragment).Single(),
-                    repo2 = q.Repository("octokit.graphql.net", "octokit").Select(fragment).Single(),
+                    repo1 = q.Repository("octokit.net", "octokit", null).Select(fragment).Single(),
+                    repo2 = q.Repository("octokit.graphql.net", "octokit", null).Select(fragment).Single(),
                 });
 
             var result = await Connection.Run(query);
@@ -233,7 +233,7 @@ namespace Octokit.GraphQL.IntegrationTests.Queries
             var query = new Query()
                 .Select(q => new
                 {
-                    TestModel = q.Repository("octokit.net", "octokit").Select(fragment).SingleOrDefault()
+                    TestModel = q.Repository("octokit.net", "octokit", null).Select(fragment).SingleOrDefault()
                 });
 
 
@@ -260,7 +260,7 @@ namespace Octokit.GraphQL.IntegrationTests.Queries
 
             var testModelObject = (await Connection.Run(query)).OrderByDescending(s => s.StringField1).First();
 
-            Assert.Equal("webhooks.js", testModelObject.StringField1);
+            Assert.Equal("webhooks.net", testModelObject.StringField1);
         }
 
         [IntegrationTest]
@@ -276,17 +276,17 @@ namespace Octokit.GraphQL.IntegrationTests.Queries
                 .Organization(login: "octokit")
                 .Select(organization => new
                 {
-                    Member = organization.Members(10, null, null, null).Nodes
+                    Member = organization.MembersWithRole(10, null, null, null).Nodes
                         .Select(fragment).ToList().OrderBy(o => o.StringField1).First(),
 
-                    MentionableUser = organization.Repository("octokit.net")
-                        .MentionableUsers(10, null, null, null).Nodes
+                    MentionableUser = organization.Repository("octokit.net", null)
+                        .MentionableUsers(10, null, null, null, null).Nodes
                         .Select(fragment).ToList().OrderBy(o => o.StringField1).First()
                 });
 
             var testModelObject = await Connection.Run(query);
-            Assert.Equal("bkeepers", testModelObject.Member.StringField1);
-            Assert.Equal("bkeepers", testModelObject.MentionableUser.StringField1);
+            Assert.Equal("alanjrogers", testModelObject.Member.StringField1);
+            Assert.Equal("anaisbetts", testModelObject.MentionableUser.StringField1);
         }
 
         [IntegrationTest]
@@ -296,7 +296,7 @@ namespace Octokit.GraphQL.IntegrationTests.Queries
                 .Repository(owner: Var("owner"), name: Var("name"))
                 .Select(repository => new
                 {
-                    Issues = repository.Issues(null, null, null, null, null, null, null).AllPages().Select(issue => issue.Title).ToList(),
+                    Issues = repository.Issues(null, null, null, null, null, null, null, null).AllPages().Select(issue => issue.Title).ToList(),
                     PullRequests = repository.PullRequests(null, null, null, null, null, null, null, null, null).AllPages().Select(issue => issue.Title).ToList(),
                 })
                 .Compile();
@@ -319,8 +319,8 @@ namespace Octokit.GraphQL.IntegrationTests.Queries
                 .Repository(owner: Var("owner"), name: Var("name"))
                 .Select(repository => new 
                 {
-                    StringList1 = repository.Issues(null, null, null, null, null, null, null).AllPages().Select(issue => issue.Title).ToList(),
-                    StringList2 = repository.Issues(null, null, null, null, null, null, null).AllPages().Select(issue => issue.Title).ToList(),
+                    StringList1 = repository.Issues(null, null, null, null, null, null, null, null).AllPages().Select(issue => issue.Title).ToList(),
+                    StringList2 = repository.Issues(null, null, null, null, null, null, null, null).AllPages().Select(issue => issue.Title).ToList(),
                 })
                 .Compile();
             var vars = new Dictionary<string, object>
@@ -370,7 +370,7 @@ namespace Octokit.GraphQL.IntegrationTests.Queries
             var query = new Query().Select(q => new
             {
                 repoOwner = q
-                    .Repository("octokit.net", "octokit")
+                    .Repository("octokit.net", "octokit", null)
                     .Owner
                     .Select(fragment)
                     .SingleOrDefault()
@@ -437,7 +437,6 @@ namespace Octokit.GraphQL.IntegrationTests.Queries
             public string StringField1;
             public string StringField2;
             public int IntField1;
-            public int IntField2;
         }
 
         public class OwnerModel

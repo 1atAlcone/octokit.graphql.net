@@ -30,7 +30,15 @@ namespace Octokit.GraphQL.Model
         /// </summary>
         public DateTimeOffset CreatedAt { get; }
 
+        /// <summary>
+        /// The Node ID of the ReopenedEvent object
+        /// </summary>
         public ID Id { get; }
+
+        /// <summary>
+        /// The reason the issue state was changed to open.
+        /// </summary>
+        public IssueStateReason? StateReason { get; }
 
         internal static ReopenedEvent Create(Expression expression)
         {

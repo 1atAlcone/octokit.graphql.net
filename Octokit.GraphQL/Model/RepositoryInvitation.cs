@@ -15,6 +15,14 @@ namespace Octokit.GraphQL.Model
         {
         }
 
+        /// <summary>
+        /// The email address that received the invitation.
+        /// </summary>
+        public string Email { get; }
+
+        /// <summary>
+        /// The Node ID of the RepositoryInvitation object
+        /// </summary>
         public ID Id { get; }
 
         /// <summary>
@@ -26,6 +34,11 @@ namespace Octokit.GraphQL.Model
         /// The user who created the invitation.
         /// </summary>
         public User Inviter => this.CreateProperty(x => x.Inviter, Octokit.GraphQL.Model.User.Create);
+
+        /// <summary>
+        /// The permalink for this repository invitation.
+        /// </summary>
+        public string Permalink { get; }
 
         /// <summary>
         /// The permission granted on this repository by this invitation.

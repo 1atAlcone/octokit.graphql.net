@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -204,7 +204,7 @@ namespace Octokit.GraphQL.Core.Builders
             }
             else if (!falseNull)
             {
-                ifTrue = Expression.Constant(null, ifFalse.Type);
+                ifTrue = Expression.Constant(null, node.Type);
             }
 
             if (!falseNull)
@@ -213,14 +213,14 @@ namespace Octokit.GraphQL.Core.Builders
             }
             else if (!trueNull)
             {
-                ifFalse = Expression.Constant(null, ifTrue.Type);
+                ifFalse = Expression.Constant(null, node.Type);
             }
 
             return Expression.Condition(
                 test,
                 ifTrue,
                 ifFalse,
-                !IsNullConstant(ifTrue) ? ifTrue.Type : ifFalse.Type);
+                node.Type);
         }
 
         protected override Expression VisitExtension(Expression node)
@@ -395,7 +395,8 @@ namespace Octokit.GraphQL.Core.Builders
                         syntax.Head.Selections.Add(pageInfo);
 
                         // And store an expression to read the `pageInfo` from the subquery.
-                        var selections = syntax.FieldStack
+                        var selections = syntax.SelectionStack
+                            .OfType<FieldSelection>()
                             .Select(x => x.Name)
                             .Concat(new[] { "pageInfo" });
                         this.pageInfo = CreateSelectTokenExpression(selections);
@@ -434,7 +435,9 @@ namespace Octokit.GraphQL.Core.Builders
         private Expression<Func<JObject, IEnumerable<JToken>>> CreatePageInfoExpression()
         {
             return CreateSelectTokensExpression(
-                syntax.FieldStack.Select(x => x.Alias ?? x.Name).Concat(new[] { "pageInfo" }));
+                syntax.SelectionStack
+                    .OfType<FieldSelection>()
+                    .Select(x => x.Alias ?? x.Name).Concat(new[] { "pageInfo" }));
         }
 
         private static Expression<Func<JObject, JToken>> CreateSelectTokenExpression(IEnumerable<string> selectors)
@@ -652,10 +655,10 @@ namespace Octokit.GraphQL.Core.Builders
                     instance = Visit(AliasedExpression.WrapIfNeeded(allPages.Method, alias));
 
                     // Select the "id" fields for the subquery.
-                    var parentSelection = syntax.FieldStack.Take(syntax.FieldStack.Count - 1);
+                    var parentSelection = syntax.SelectionStack.Take(syntax.SelectionStack.Count - 1);
                     var idSelection = AddIdSelection(parentSelection.Last());
                     parentIds = CreateSelectTokensExpression(
-                        parentSelection.Select(x => x.Name).Concat(new[] 
+                        parentSelection.OfType<FieldSelection>().Select(x => x.Name).Concat(new[] 
                         {
                             idSelection.Alias ?? idSelection.Name
                         }));
@@ -723,10 +726,10 @@ namespace Octokit.GraphQL.Core.Builders
                     instance = Visit(AliasedExpression.WrapIfNeeded(allPages.Method, alias));
 
                     // Select the "id" fields for the subquery.
-                    var parentSelection = syntax.FieldStack.Take(syntax.FieldStack.Count - 1);
+                    var parentSelection = syntax.SelectionStack.Take(syntax.SelectionStack.Count - 1);
                     var idSelection = AddIdSelection(parentSelection.Last());
                     parentIds = CreateSelectTokensExpression(
-                        parentSelection.Select(x => x.Name).Concat(new[]
+                        parentSelection.OfType<FieldSelection>().Select(x => x.Name).Concat(new[]
                         {
                             idSelection.Alias ?? idSelection.Name
                         }));

@@ -16,7 +16,7 @@ namespace Octokit.GraphQL.Model
         }
 
         /// <summary>
-        /// `true` if the object is closed (definition of closed may depend on type)
+        /// Indicates if the object is closed (definition of closed may depend on type)
         /// </summary>
         public bool Closed { get; }
 
@@ -45,6 +45,9 @@ namespace Octokit.GraphQL.Model
         /// </summary>
         public DateTimeOffset? DueOn { get; }
 
+        /// <summary>
+        /// The Node ID of the Milestone object
+        /// </summary>
         public ID Id { get; }
 
         /// <summary>
@@ -54,15 +57,21 @@ namespace Octokit.GraphQL.Model
         /// <param name="after">Returns the elements in the list that come after the specified cursor.</param>
         /// <param name="last">Returns the last _n_ elements from the list.</param>
         /// <param name="before">Returns the elements in the list that come before the specified cursor.</param>
+        /// <param name="filterBy">Filtering options for issues returned from the connection.</param>
         /// <param name="labels">A list of label names to filter the pull requests by.</param>
         /// <param name="orderBy">Ordering options for issues returned from the connection.</param>
         /// <param name="states">A list of states to filter the issues by.</param>
-        public IssueConnection Issues(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null, Arg<IEnumerable<string>>? labels = null, Arg<IssueOrder>? orderBy = null, Arg<IEnumerable<IssueState>>? states = null) => this.CreateMethodCall(x => x.Issues(first, after, last, before, labels, orderBy, states), Octokit.GraphQL.Model.IssueConnection.Create);
+        public IssueConnection Issues(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null, Arg<IssueFilters>? filterBy = null, Arg<IEnumerable<string>>? labels = null, Arg<IssueOrder>? orderBy = null, Arg<IEnumerable<IssueState>>? states = null) => this.CreateMethodCall(x => x.Issues(first, after, last, before, filterBy, labels, orderBy, states), Octokit.GraphQL.Model.IssueConnection.Create);
 
         /// <summary>
         /// Identifies the number of the milestone.
         /// </summary>
         public int Number { get; }
+
+        /// <summary>
+        /// Identifies the percentage complete for the milestone
+        /// </summary>
+        public double ProgressPercentage { get; }
 
         /// <summary>
         /// A list of pull requests associated with the milestone.
@@ -107,6 +116,16 @@ namespace Octokit.GraphQL.Model
         /// The HTTP URL for this milestone
         /// </summary>
         public string Url { get; }
+
+        /// <summary>
+        /// Indicates if the object can be closed by the viewer.
+        /// </summary>
+        public bool ViewerCanClose { get; }
+
+        /// <summary>
+        /// Indicates if the object can be reopened by the viewer.
+        /// </summary>
+        public bool ViewerCanReopen { get; }
 
         internal static Milestone Create(Expression expression)
         {

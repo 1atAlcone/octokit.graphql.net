@@ -26,6 +26,16 @@ namespace Octokit.GraphQL.Model
         public int Additions { get; }
 
         /// <summary>
+        /// The merged Pull Request that introduced the commit to the repository. If the commit is not present in the default branch, additionally returns open Pull Requests associated with the commit
+        /// </summary>
+        /// <param name="first">Returns the first _n_ elements from the list.</param>
+        /// <param name="after">Returns the elements in the list that come after the specified cursor.</param>
+        /// <param name="last">Returns the last _n_ elements from the list.</param>
+        /// <param name="before">Returns the elements in the list that come before the specified cursor.</param>
+        /// <param name="orderBy">Ordering options for pull requests.</param>
+        public PullRequestConnection AssociatedPullRequests(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null, Arg<PullRequestOrder>? orderBy = null) => this.CreateMethodCall(x => x.AssociatedPullRequests(first, after, last, before, orderBy), Octokit.GraphQL.Model.PullRequestConnection.Create);
+
+        /// <summary>
         /// Authorship details of the commit.
         /// </summary>
         public GitActor Author => this.CreateProperty(x => x.Author, Octokit.GraphQL.Model.GitActor.Create);
@@ -41,15 +51,31 @@ namespace Octokit.GraphQL.Model
         public DateTimeOffset AuthoredDate { get; }
 
         /// <summary>
+        /// The list of authors for this commit based on the git author and the Co-authored-by
+        /// message trailer. The git author will always be first.
+        /// </summary>
+        /// <param name="first">Returns the first _n_ elements from the list.</param>
+        /// <param name="after">Returns the elements in the list that come after the specified cursor.</param>
+        /// <param name="last">Returns the last _n_ elements from the list.</param>
+        /// <param name="before">Returns the elements in the list that come before the specified cursor.</param>
+        public GitActorConnection Authors(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null) => this.CreateMethodCall(x => x.Authors(first, after, last, before), Octokit.GraphQL.Model.GitActorConnection.Create);
+
+        /// <summary>
         /// Fetches `git blame` information.
         /// </summary>
         /// <param name="path">The file whose Git blame information you want.</param>
         public Blame Blame(Arg<string> path) => this.CreateMethodCall(x => x.Blame(path), Octokit.GraphQL.Model.Blame.Create);
 
         /// <summary>
-        /// The number of changed files in this commit.
+        /// We recommend using the `changedFilesIfAvailable` field instead of `changedFiles`, as `changedFiles` will cause your request to return an error if GitHub is unable to calculate the number of changed files.
         /// </summary>
+        [Obsolete(@"`changedFiles` will be removed. Use `changedFilesIfAvailable` instead. Removal on 2023-01-01 UTC.")]
         public int ChangedFiles { get; }
+
+        /// <summary>
+        /// The number of changed files in this commit. If GitHub is unable to calculate the number of changed files (for example due to a timeout), this will return `null`. We recommend using this field instead of `changedFiles`.
+        /// </summary>
+        public int? ChangedFilesIfAvailable { get; }
 
         /// <summary>
         /// The check suites associated with a commit.
@@ -86,12 +112,12 @@ namespace Octokit.GraphQL.Model
         public DateTimeOffset CommittedDate { get; }
 
         /// <summary>
-        /// Check if commited via GitHub web UI.
+        /// Check if committed via GitHub web UI.
         /// </summary>
         public bool CommittedViaWeb { get; }
 
         /// <summary>
-        /// Committership details of the commit.
+        /// Committer details of the commit.
         /// </summary>
         public GitActor Committer => this.CreateProperty(x => x.Committer, Octokit.GraphQL.Model.GitActor.Create);
 
@@ -99,6 +125,23 @@ namespace Octokit.GraphQL.Model
         /// The number of deletions in this commit.
         /// </summary>
         public int Deletions { get; }
+
+        /// <summary>
+        /// The deployments associated with a commit.
+        /// </summary>
+        /// <param name="first">Returns the first _n_ elements from the list.</param>
+        /// <param name="after">Returns the elements in the list that come after the specified cursor.</param>
+        /// <param name="last">Returns the last _n_ elements from the list.</param>
+        /// <param name="before">Returns the elements in the list that come before the specified cursor.</param>
+        /// <param name="environments">Environments to list deployments for</param>
+        /// <param name="orderBy">Ordering options for deployments returned from the connection.</param>
+        public DeploymentConnection Deployments(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null, Arg<IEnumerable<string>>? environments = null, Arg<DeploymentOrder>? orderBy = null) => this.CreateMethodCall(x => x.Deployments(first, after, last, before, environments, orderBy), Octokit.GraphQL.Model.DeploymentConnection.Create);
+
+        /// <summary>
+        /// The tree entry representing the file located at the given path.
+        /// </summary>
+        /// <param name="path">The path for the file</param>
+        public TreeEntry File(Arg<string> path) => this.CreateMethodCall(x => x.File(path), Octokit.GraphQL.Model.TreeEntry.Create);
 
         /// <summary>
         /// The linear commit history starting from (and including) this commit, in the same order as `git log`.
@@ -113,6 +156,9 @@ namespace Octokit.GraphQL.Model
         /// <param name="until">Allows specifying an ending time or date for fetching commits.</param>
         public CommitHistoryConnection History(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null, Arg<CommitAuthor>? author = null, Arg<string>? path = null, Arg<string>? since = null, Arg<string>? until = null) => this.CreateMethodCall(x => x.History(first, after, last, before, author, path, since, until), Octokit.GraphQL.Model.CommitHistoryConnection.Create);
 
+        /// <summary>
+        /// The Node ID of the Commit object
+        /// </summary>
         public ID Id { get; }
 
         /// <summary>
@@ -146,6 +192,11 @@ namespace Octokit.GraphQL.Model
         public string Oid { get; }
 
         /// <summary>
+        /// The organization this commit was made on behalf of.
+        /// </summary>
+        public Organization OnBehalfOf => this.CreateProperty(x => x.OnBehalfOf, Octokit.GraphQL.Model.Organization.Create);
+
+        /// <summary>
         /// The parents of a commit.
         /// </summary>
         /// <param name="first">Returns the first _n_ elements from the list.</param>
@@ -157,6 +208,7 @@ namespace Octokit.GraphQL.Model
         /// <summary>
         /// The datetime when this commit was pushed.
         /// </summary>
+        [Obsolete(@"`pushedDate` is no longer supported. Removal on 2023-07-01 UTC.")]
         public DateTimeOffset? PushedDate { get; }
 
         /// <summary>
@@ -178,6 +230,20 @@ namespace Octokit.GraphQL.Model
         /// Status information for this commit
         /// </summary>
         public Status Status => this.CreateProperty(x => x.Status, Octokit.GraphQL.Model.Status.Create);
+
+        /// <summary>
+        /// Check and Status rollup information for this commit.
+        /// </summary>
+        public StatusCheckRollup StatusCheckRollup => this.CreateProperty(x => x.StatusCheckRollup, Octokit.GraphQL.Model.StatusCheckRollup.Create);
+
+        /// <summary>
+        /// Returns a list of all submodules in this repository as of this Commit parsed from the .gitmodules file.
+        /// </summary>
+        /// <param name="first">Returns the first _n_ elements from the list.</param>
+        /// <param name="after">Returns the elements in the list that come after the specified cursor.</param>
+        /// <param name="last">Returns the last _n_ elements from the list.</param>
+        /// <param name="before">Returns the elements in the list that come before the specified cursor.</param>
+        public SubmoduleConnection Submodules(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null) => this.CreateMethodCall(x => x.Submodules(first, after, last, before), Octokit.GraphQL.Model.SubmoduleConnection.Create);
 
         /// <summary>
         /// Returns a URL to download a tarball archive for a repository.

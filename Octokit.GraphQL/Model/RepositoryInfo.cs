@@ -11,8 +11,14 @@ namespace Octokit.GraphQL.Model
     /// <summary>
     /// A subset of repository info.
     /// </summary>
+    [GraphQLIdentifier("RepositoryInfo")]
     public interface IRepositoryInfo : IQueryableValue<IRepositoryInfo>, IQueryableInterface
     {
+        /// <summary>
+        /// Identifies the date and time when the repository was archived.
+        /// </summary>
+        DateTimeOffset? ArchivedAt { get; }
+
         /// <summary>
         /// Identifies the date and time when the object was created.
         /// </summary>
@@ -34,9 +40,24 @@ namespace Octokit.GraphQL.Model
         int ForkCount { get; }
 
         /// <summary>
+        /// Indicates if the repository has the Discussions feature enabled.
+        /// </summary>
+        bool HasDiscussionsEnabled { get; }
+
+        /// <summary>
         /// Indicates if the repository has issues feature enabled.
         /// </summary>
         bool HasIssuesEnabled { get; }
+
+        /// <summary>
+        /// Indicates if the repository has the Projects feature enabled.
+        /// </summary>
+        bool HasProjectsEnabled { get; }
+
+        /// <summary>
+        /// Indicates if the repository displays a Sponsor button for financial contributions.
+        /// </summary>
+        bool HasSponsorshipsEnabled { get; }
 
         /// <summary>
         /// Indicates if the repository has wiki feature enabled.
@@ -59,6 +80,11 @@ namespace Octokit.GraphQL.Model
         bool IsFork { get; }
 
         /// <summary>
+        /// Indicates if a repository is either owned by an organization, or is a private fork of an organization repository.
+        /// </summary>
+        bool IsInOrganization { get; }
+
+        /// <summary>
         /// Indicates if the repository has been locked or not.
         /// </summary>
         bool IsLocked { get; }
@@ -69,9 +95,14 @@ namespace Octokit.GraphQL.Model
         bool IsMirror { get; }
 
         /// <summary>
-        /// Identifies if the repository is private.
+        /// Identifies if the repository is private or internal.
         /// </summary>
         bool IsPrivate { get; }
+
+        /// <summary>
+        /// Identifies if the repository is a template that can be used to generate new repositories.
+        /// </summary>
+        bool IsTemplate { get; }
 
         /// <summary>
         /// The license associated with the repository
@@ -99,12 +130,17 @@ namespace Octokit.GraphQL.Model
         string NameWithOwner { get; }
 
         /// <summary>
+        /// The image used to represent this repository in Open Graph data.
+        /// </summary>
+        string OpenGraphImageUrl { get; }
+
+        /// <summary>
         /// The User owner of the repository.
         /// </summary>
         IRepositoryOwner Owner { get; }
 
         /// <summary>
-        /// Identifies when the repository was last pushed to.
+        /// Identifies the date and time when the repository was last pushed to.
         /// </summary>
         DateTimeOffset? PushedAt { get; }
 
@@ -128,6 +164,16 @@ namespace Octokit.GraphQL.Model
         /// The HTTP URL for this repository
         /// </summary>
         string Url { get; }
+
+        /// <summary>
+        /// Whether this repository has a custom image to use with Open Graph as opposed to being represented by the owner's avatar.
+        /// </summary>
+        bool UsesCustomOpenGraphImage { get; }
+
+        /// <summary>
+        /// Indicates the repository's visibility level.
+        /// </summary>
+        RepositoryVisibility Visibility { get; }
     }
 }
 
@@ -139,11 +185,14 @@ namespace Octokit.GraphQL.Model.Internal
     using Octokit.GraphQL.Core;
     using Octokit.GraphQL.Core.Builders;
 
+    [GraphQLIdentifier("RepositoryInfo")]
     internal class StubIRepositoryInfo : QueryableValue<StubIRepositoryInfo>, IRepositoryInfo
     {
         internal StubIRepositoryInfo(Expression expression) : base(expression)
         {
         }
+
+        public DateTimeOffset? ArchivedAt { get; }
 
         public DateTimeOffset CreatedAt { get; }
 
@@ -153,7 +202,13 @@ namespace Octokit.GraphQL.Model.Internal
 
         public int ForkCount { get; }
 
+        public bool HasDiscussionsEnabled { get; }
+
         public bool HasIssuesEnabled { get; }
+
+        public bool HasProjectsEnabled { get; }
+
+        public bool HasSponsorshipsEnabled { get; }
 
         public bool HasWikiEnabled { get; }
 
@@ -163,11 +218,15 @@ namespace Octokit.GraphQL.Model.Internal
 
         public bool IsFork { get; }
 
+        public bool IsInOrganization { get; }
+
         public bool IsLocked { get; }
 
         public bool IsMirror { get; }
 
         public bool IsPrivate { get; }
+
+        public bool IsTemplate { get; }
 
         public License LicenseInfo => this.CreateProperty(x => x.LicenseInfo, Octokit.GraphQL.Model.License.Create);
 
@@ -178,6 +237,8 @@ namespace Octokit.GraphQL.Model.Internal
         public string Name { get; }
 
         public string NameWithOwner { get; }
+
+        public string OpenGraphImageUrl { get; }
 
         public IRepositoryOwner Owner => this.CreateProperty(x => x.Owner, Octokit.GraphQL.Model.Internal.StubIRepositoryOwner.Create);
 
@@ -190,6 +251,10 @@ namespace Octokit.GraphQL.Model.Internal
         public DateTimeOffset UpdatedAt { get; }
 
         public string Url { get; }
+
+        public bool UsesCustomOpenGraphImage { get; }
+
+        public RepositoryVisibility Visibility { get; }
 
         internal static StubIRepositoryInfo Create(Expression expression)
         {

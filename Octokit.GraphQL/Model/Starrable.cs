@@ -11,9 +11,18 @@ namespace Octokit.GraphQL.Model
     /// <summary>
     /// Things that can be starred.
     /// </summary>
+    [GraphQLIdentifier("Starrable")]
     public interface IStarrable : IQueryableValue<IStarrable>, IQueryableInterface
     {
+        /// <summary>
+        /// The Node ID of the Starrable object
+        /// </summary>
         ID Id { get; }
+
+        /// <summary>
+        /// Returns a count of how many stargazers there are on this object
+        /// </summary>
+        int StargazerCount { get; }
 
         /// <summary>
         /// A list of users who have starred this starrable.
@@ -40,6 +49,7 @@ namespace Octokit.GraphQL.Model.Internal
     using Octokit.GraphQL.Core;
     using Octokit.GraphQL.Core.Builders;
 
+    [GraphQLIdentifier("Starrable")]
     internal class StubIStarrable : QueryableValue<StubIStarrable>, IStarrable
     {
         internal StubIStarrable(Expression expression) : base(expression)
@@ -47,6 +57,8 @@ namespace Octokit.GraphQL.Model.Internal
         }
 
         public ID Id { get; }
+
+        public int StargazerCount { get; }
 
         public StargazerConnection Stargazers(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null, Arg<StarOrder>? orderBy = null) => this.CreateMethodCall(x => x.Stargazers(first, after, last, before, orderBy), Octokit.GraphQL.Model.StargazerConnection.Create);
 

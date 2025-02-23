@@ -11,9 +11,9 @@ using Xunit;
 
 namespace Octokit.GraphQL.UnitTests
 {
-    public class ExpressionRewiterTests
+    public class ExpressionRewriterTests
     {
-        public ExpressionRewiterTests()
+        public ExpressionRewriterTests()
         {
             ExpressionCompiler.IsUnitTesting = true;
         }
@@ -58,12 +58,12 @@ namespace Octokit.GraphQL.UnitTests
         public void Repository_Select_Use_Fragment_Twice()
         {
             var fragment = new Fragment<Repository, string>("repositoryName", repository => repository.Name);
-            
+
             var query = new Query()
                 .Select(q => new
                 {
-                    repo1 = q.Repository("foo", "bar").Select(fragment).SingleOrDefault(),
-                    repo2 = q.Repository("foo", "bar").Select(fragment).SingleOrDefault()
+                    repo1 = q.Repository("foo", "bar", null).Select(fragment).SingleOrDefault(),
+                    repo2 = q.Repository("foo", "bar", null).Select(fragment).SingleOrDefault()
                 });
 
             Expression<Func<JObject, object>> expected = data =>
@@ -129,7 +129,7 @@ namespace Octokit.GraphQL.UnitTests
         {
             var query = new Query()
                 .Select(x => x.RepositoryOwner("foo")
-                              .Repositories(30, null, null, null, null, null, null, null, null, null)
+                              .Repositories(30, null, null, null, null, null, null, null, null, null, null, null, null)
                               .Edges
                               .Select(y => y.Node)
                               .Select(z => new
@@ -145,7 +145,7 @@ namespace Octokit.GraphQL.UnitTests
             Expression<Func<JObject, IEnumerable<object>>> expected = data =>
                 (IEnumerable<object>)Rewritten.Value.SelectList(
                     data["data"],
-                    x => 
+                    x =>
                         Rewritten.List.Select(
                             Rewritten.List.Select(
                                 x["repositoryOwner"]["repositories"]["edges"],

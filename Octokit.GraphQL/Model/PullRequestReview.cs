@@ -26,12 +26,17 @@ namespace Octokit.GraphQL.Model
         public CommentAuthorAssociation AuthorAssociation { get; }
 
         /// <summary>
+        /// Indicates whether the author of this review has push access to the repository.
+        /// </summary>
+        public bool AuthorCanPushToRepository { get; }
+
+        /// <summary>
         /// Identifies the pull request review body.
         /// </summary>
         public string Body { get; }
 
         /// <summary>
-        /// The body of this review rendered to HTML.
+        /// The body rendered to HTML.
         /// </summary>
         public string BodyHTML { get; }
 
@@ -67,6 +72,7 @@ namespace Octokit.GraphQL.Model
         /// <summary>
         /// Identifies the primary key from the database.
         /// </summary>
+        [Obsolete(@"`databaseId` will be removed because it does not support 64-bit signed integer identifiers. Use `fullDatabaseId` instead. Removal on 2024-07-01 UTC.")]
         public int? DatabaseId { get; }
 
         /// <summary>
@@ -74,6 +80,14 @@ namespace Octokit.GraphQL.Model
         /// </summary>
         public IActor Editor => this.CreateProperty(x => x.Editor, Octokit.GraphQL.Model.Internal.StubIActor.Create);
 
+        /// <summary>
+        /// Identifies the primary key from the database as a BigInt.
+        /// </summary>
+        public string FullDatabaseId { get; }
+
+        /// <summary>
+        /// The Node ID of the PullRequestReview object
+        /// </summary>
         public ID Id { get; }
 
         /// <summary>
@@ -82,9 +96,19 @@ namespace Octokit.GraphQL.Model
         public bool IncludesCreatedEdit { get; }
 
         /// <summary>
+        /// Returns whether or not a comment has been minimized.
+        /// </summary>
+        public bool IsMinimized { get; }
+
+        /// <summary>
         /// The moment the editor made the last edit
         /// </summary>
         public DateTimeOffset? LastEditedAt { get; }
+
+        /// <summary>
+        /// Returns why the comment was minimized. One of `abuse`, `off-topic`, `outdated`, `resolved`, `duplicate` and `spam`. Note that the case and formatting of these values differs from the inputs to the `MinimizeComment` mutation.
+        /// </summary>
+        public string MinimizedReason { get; }
 
         /// <summary>
         /// A list of teams that this review was made on behalf of.
@@ -104,6 +128,22 @@ namespace Octokit.GraphQL.Model
         /// Identifies the pull request associated with this pull request review.
         /// </summary>
         public PullRequest PullRequest => this.CreateProperty(x => x.PullRequest, Octokit.GraphQL.Model.PullRequest.Create);
+
+        /// <summary>
+        /// A list of reactions grouped by content left on the subject.
+        /// </summary>
+        public IQueryableList<ReactionGroup> ReactionGroups => this.CreateProperty(x => x.ReactionGroups);
+
+        /// <summary>
+        /// A list of Reactions left on the Issue.
+        /// </summary>
+        /// <param name="first">Returns the first _n_ elements from the list.</param>
+        /// <param name="after">Returns the elements in the list that come after the specified cursor.</param>
+        /// <param name="last">Returns the last _n_ elements from the list.</param>
+        /// <param name="before">Returns the elements in the list that come before the specified cursor.</param>
+        /// <param name="content">Allows filtering Reactions by emoji.</param>
+        /// <param name="orderBy">Allows specifying the order in which reactions are returned.</param>
+        public ReactionConnection Reactions(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null, Arg<ReactionContent>? content = null, Arg<ReactionOrder>? orderBy = null) => this.CreateMethodCall(x => x.Reactions(first, after, last, before, content, orderBy), Octokit.GraphQL.Model.ReactionConnection.Create);
 
         /// <summary>
         /// The repository associated with this node.
@@ -148,6 +188,16 @@ namespace Octokit.GraphQL.Model
         /// Check if the current viewer can delete this object.
         /// </summary>
         public bool ViewerCanDelete { get; }
+
+        /// <summary>
+        /// Check if the current viewer can minimize this object.
+        /// </summary>
+        public bool ViewerCanMinimize { get; }
+
+        /// <summary>
+        /// Can user react to this subject
+        /// </summary>
+        public bool ViewerCanReact { get; }
 
         /// <summary>
         /// Check if the current viewer can update this object.

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Octokit.GraphQL.Core;
 using Octokit.GraphQL.Model;
 using Xunit;
 
@@ -117,7 +120,7 @@ namespace Octokit.GraphQL.UnitTests
             var expression = new Query()
                 .Select(root => root
                     .RepositoryOwner("foo")
-                    .Repositories(30, null, null, null, null, null, null, null, null, null)
+                    .Repositories(30, null, null, null, null, null, null, null, null, null, null, null, null)
                     .Edges.Select(x => x.Node)
                     .Select(x => new
                     {
@@ -218,7 +221,7 @@ namespace Octokit.GraphQL.UnitTests
 
             var expression = new Query()
                 .Select(x => x.RepositoryOwner("foo")
-                              .Repositories(30, null, null, null, null, null, null, null, null, null)
+                              .Repositories(30, null, null, null, null, null, null, null, null, null, null, null, null)
                               .Edges
                               .Select(y => y.Node)
                               .Select(y => new
@@ -316,6 +319,80 @@ namespace Octokit.GraphQL.UnitTests
             var query = expression.Compile();
 
             Assert.Equal(expected, query.ToString(), ignoreLineEndingDifferences: true);
+        }
+
+        [Fact]
+        public void DateTimeOffsetVariable()
+        {
+            var expected = @"query($start: DateTime) {
+  user(login: ""grokys"") {
+    contributionsCollection(from: $start) {
+      latestRestrictedContributionDate
+    }
+  }
+}";
+
+            var expression = new Query()
+                             .User("grokys")
+                             .ContributionsCollection(@from: Variable.Var("start"))
+                             .Select(c => c.LatestRestrictedContributionDate);
+
+            var query = expression.Compile();
+
+            Assert.Equal(expected, query.ToString(), ignoreLineEndingDifferences: true);
+        }
+        
+        
+        [Fact]
+        public void TestAllPagesSubqueryUsesCorrectEntityName()
+        {
+            var expectedMasterQuery = @"query {
+  repositoryOwner(login: ""foo"") {
+    id
+    repositories(first: 100) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      nodes {
+        name
+      }
+    }
+  }
+}";
+            
+            // The actual type that we map RepositoryOwner to is called StubIRepositoryOwner
+            // So make sure it gets serialized to the query correctly. 
+            var expectedSubQuery = @"query($__id: ID!, $__after: String) {
+  node(id: $__id) {
+    __typename
+    ... on RepositoryOwner {
+      repositories(first: 100, after: $__after) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        nodes {
+          name
+        }
+      }
+    }
+  }
+}";
+            
+            var query = new Query()
+                .RepositoryOwner("foo")
+                .Repositories()
+                .AllPages(100)
+                .Select(x => x.Name)
+                .Compile();
+            
+            var subQuery = (query as PagedQuery<IEnumerable<string>>).Subqueries.First();
+            
+            Assert.Equal(expectedMasterQuery, query.ToString(), ignoreLineEndingDifferences: true);
+            Assert.Equal(expectedSubQuery, subQuery.ToString(), ignoreLineEndingDifferences: true);
+
+
         }
     }
 }

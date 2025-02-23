@@ -11,6 +11,7 @@ namespace Octokit.GraphQL.Model
     /// <summary>
     /// An object that can have labels assigned to it.
     /// </summary>
+    [GraphQLIdentifier("Labelable")]
     public interface ILabelable : IQueryableValue<ILabelable>, IQueryableInterface
     {
         /// <summary>
@@ -20,7 +21,8 @@ namespace Octokit.GraphQL.Model
         /// <param name="after">Returns the elements in the list that come after the specified cursor.</param>
         /// <param name="last">Returns the last _n_ elements from the list.</param>
         /// <param name="before">Returns the elements in the list that come before the specified cursor.</param>
-        LabelConnection Labels(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null);
+        /// <param name="orderBy">Ordering options for labels returned from the connection.</param>
+        LabelConnection Labels(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null, Arg<LabelOrder>? orderBy = null);
     }
 }
 
@@ -32,13 +34,14 @@ namespace Octokit.GraphQL.Model.Internal
     using Octokit.GraphQL.Core;
     using Octokit.GraphQL.Core.Builders;
 
+    [GraphQLIdentifier("Labelable")]
     internal class StubILabelable : QueryableValue<StubILabelable>, ILabelable
     {
         internal StubILabelable(Expression expression) : base(expression)
         {
         }
 
-        public LabelConnection Labels(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null) => this.CreateMethodCall(x => x.Labels(first, after, last, before), Octokit.GraphQL.Model.LabelConnection.Create);
+        public LabelConnection Labels(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null, Arg<LabelOrder>? orderBy = null) => this.CreateMethodCall(x => x.Labels(first, after, last, before, orderBy), Octokit.GraphQL.Model.LabelConnection.Create);
 
         internal static StubILabelable Create(Expression expression)
         {

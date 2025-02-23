@@ -30,17 +30,20 @@ namespace Octokit.GraphQL.Model
         /// </summary>
         public int? DatabaseId { get; }
 
+        /// <summary>
+        /// Identifies the optional message associated with the 'review_dismissed' event.
+        /// </summary>
+        public string DismissalMessage { get; }
+
+        /// <summary>
+        /// Identifies the optional message associated with the event, rendered to HTML.
+        /// </summary>
+        public string DismissalMessageHTML { get; }
+
+        /// <summary>
+        /// The Node ID of the ReviewDismissedEvent object
+        /// </summary>
         public ID Id { get; }
-
-        /// <summary>
-        /// Identifies the message associated with the 'review_dismissed' event.
-        /// </summary>
-        public string Message { get; }
-
-        /// <summary>
-        /// The message associated with the event, rendered to HTML.
-        /// </summary>
-        public string MessageHtml { get; }
 
         /// <summary>
         /// Identifies the previous state of the review with the 'review_dismissed' event.

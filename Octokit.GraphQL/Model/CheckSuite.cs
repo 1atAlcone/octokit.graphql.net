@@ -51,10 +51,18 @@ namespace Octokit.GraphQL.Model
         public DateTimeOffset CreatedAt { get; }
 
         /// <summary>
+        /// The user who triggered the check suite.
+        /// </summary>
+        public User Creator => this.CreateProperty(x => x.Creator, Octokit.GraphQL.Model.User.Create);
+
+        /// <summary>
         /// Identifies the primary key from the database.
         /// </summary>
         public int? DatabaseId { get; }
 
+        /// <summary>
+        /// The Node ID of the CheckSuite object
+        /// </summary>
         public ID Id { get; }
 
         /// <summary>
@@ -82,6 +90,11 @@ namespace Octokit.GraphQL.Model
         public Repository Repository => this.CreateProperty(x => x.Repository, Octokit.GraphQL.Model.Repository.Create);
 
         /// <summary>
+        /// The HTTP path for this check suite
+        /// </summary>
+        public string ResourcePath { get; }
+
+        /// <summary>
         /// The status of this check suite.
         /// </summary>
         public CheckStatusState Status { get; }
@@ -90,6 +103,16 @@ namespace Octokit.GraphQL.Model
         /// Identifies the date and time when the object was last updated.
         /// </summary>
         public DateTimeOffset UpdatedAt { get; }
+
+        /// <summary>
+        /// The HTTP URL for this check suite
+        /// </summary>
+        public string Url { get; }
+
+        /// <summary>
+        /// The workflow run associated with this check suite.
+        /// </summary>
+        public WorkflowRun WorkflowRun => this.CreateProperty(x => x.WorkflowRun, Octokit.GraphQL.Model.WorkflowRun.Create);
 
         internal static CheckSuite Create(Expression expression)
         {

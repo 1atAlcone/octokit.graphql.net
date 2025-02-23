@@ -35,12 +35,20 @@ namespace Octokit.GraphQL.Model
         /// </summary>
         public DateTimeOffset CreatedAt { get; }
 
+        /// <summary>
+        /// The Node ID of the ClosedEvent object
+        /// </summary>
         public ID Id { get; }
 
         /// <summary>
         /// The HTTP path for this closed event.
         /// </summary>
         public string ResourcePath { get; }
+
+        /// <summary>
+        /// The reason the issue state was changed to closed.
+        /// </summary>
+        public IssueStateReason? StateReason { get; }
 
         /// <summary>
         /// The HTTP URL for this closed event.

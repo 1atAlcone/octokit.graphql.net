@@ -16,6 +16,12 @@ namespace Octokit.GraphQL.Model
         }
 
         /// <summary>
+        /// The avatar of the OAuth application or the user that created the status
+        /// </summary>
+        /// <param name="size">The size of the resulting square image.</param>
+        public string AvatarUrl(Arg<int>? size = null) => default;
+
+        /// <summary>
         /// This commit this status context is attached to.
         /// </summary>
         public Commit Commit => this.CreateProperty(x => x.Commit, Octokit.GraphQL.Model.Commit.Create);
@@ -40,7 +46,17 @@ namespace Octokit.GraphQL.Model
         /// </summary>
         public string Description { get; }
 
+        /// <summary>
+        /// The Node ID of the StatusContext object
+        /// </summary>
         public ID Id { get; }
+
+        /// <summary>
+        /// Whether this is required to pass before merging for a specific pull request.
+        /// </summary>
+        /// <param name="pullRequestId">The id of the pull request this is required for</param>
+        /// <param name="pullRequestNumber">The number of the pull request this is required for</param>
+        public bool IsRequired(Arg<ID>? pullRequestId = null, Arg<int>? pullRequestNumber = null) => default;
 
         /// <summary>
         /// The state of this status context.

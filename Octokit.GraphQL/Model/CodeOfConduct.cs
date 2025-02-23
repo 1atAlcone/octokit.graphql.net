@@ -16,22 +16,32 @@ namespace Octokit.GraphQL.Model
         }
 
         /// <summary>
-        /// The body of the CoC
+        /// The body of the Code of Conduct
         /// </summary>
         public string Body { get; }
 
         /// <summary>
-        /// The key for the CoC
+        /// The Node ID of the CodeOfConduct object
+        /// </summary>
+        public ID Id { get; }
+
+        /// <summary>
+        /// The key for the Code of Conduct
         /// </summary>
         public string Key { get; }
 
         /// <summary>
-        /// The formal name of the CoC
+        /// The formal name of the Code of Conduct
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// The path to the CoC
+        /// The HTTP path for this Code of Conduct
+        /// </summary>
+        public string ResourcePath { get; }
+
+        /// <summary>
+        /// The HTTP URL for this Code of Conduct
         /// </summary>
         public string Url { get; }
 

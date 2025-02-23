@@ -42,6 +42,42 @@ namespace Octokit.GraphQL.Model
         PullRequestRevisionMarker,
 
         /// <summary>
+        /// Represents a 'automatic_base_change_failed' event on a given pull request.
+        /// </summary>
+        [EnumMember(Value = "AUTOMATIC_BASE_CHANGE_FAILED_EVENT")]
+        AutomaticBaseChangeFailedEvent,
+
+        /// <summary>
+        /// Represents a 'automatic_base_change_succeeded' event on a given pull request.
+        /// </summary>
+        [EnumMember(Value = "AUTOMATIC_BASE_CHANGE_SUCCEEDED_EVENT")]
+        AutomaticBaseChangeSucceededEvent,
+
+        /// <summary>
+        /// Represents a 'auto_merge_disabled' event on a given pull request.
+        /// </summary>
+        [EnumMember(Value = "AUTO_MERGE_DISABLED_EVENT")]
+        AutoMergeDisabledEvent,
+
+        /// <summary>
+        /// Represents a 'auto_merge_enabled' event on a given pull request.
+        /// </summary>
+        [EnumMember(Value = "AUTO_MERGE_ENABLED_EVENT")]
+        AutoMergeEnabledEvent,
+
+        /// <summary>
+        /// Represents a 'auto_rebase_enabled' event on a given pull request.
+        /// </summary>
+        [EnumMember(Value = "AUTO_REBASE_ENABLED_EVENT")]
+        AutoRebaseEnabledEvent,
+
+        /// <summary>
+        /// Represents a 'auto_squash_enabled' event on a given pull request.
+        /// </summary>
+        [EnumMember(Value = "AUTO_SQUASH_ENABLED_EVENT")]
+        AutoSquashEnabledEvent,
+
+        /// <summary>
         /// Represents a 'base_ref_changed' event on a given issue or pull request.
         /// </summary>
         [EnumMember(Value = "BASE_REF_CHANGED_EVENT")]
@@ -52,6 +88,12 @@ namespace Octokit.GraphQL.Model
         /// </summary>
         [EnumMember(Value = "BASE_REF_FORCE_PUSHED_EVENT")]
         BaseRefForcePushedEvent,
+
+        /// <summary>
+        /// Represents a 'base_ref_deleted' event on a given pull request.
+        /// </summary>
+        [EnumMember(Value = "BASE_REF_DELETED_EVENT")]
+        BaseRefDeletedEvent,
 
         /// <summary>
         /// Represents a 'deployed' event on a given pull request.
@@ -108,6 +150,30 @@ namespace Octokit.GraphQL.Model
         ReviewRequestRemovedEvent,
 
         /// <summary>
+        /// Represents a 'ready_for_review' event on a given pull request.
+        /// </summary>
+        [EnumMember(Value = "READY_FOR_REVIEW_EVENT")]
+        ReadyForReviewEvent,
+
+        /// <summary>
+        /// Represents a 'convert_to_draft' event on a given pull request.
+        /// </summary>
+        [EnumMember(Value = "CONVERT_TO_DRAFT_EVENT")]
+        ConvertToDraftEvent,
+
+        /// <summary>
+        /// Represents an 'added_to_merge_queue' event on a given pull request.
+        /// </summary>
+        [EnumMember(Value = "ADDED_TO_MERGE_QUEUE_EVENT")]
+        AddedToMergeQueueEvent,
+
+        /// <summary>
+        /// Represents a 'removed_from_merge_queue' event on a given pull request.
+        /// </summary>
+        [EnumMember(Value = "REMOVED_FROM_MERGE_QUEUE_EVENT")]
+        RemovedFromMergeQueueEvent,
+
+        /// <summary>
         /// Represents a comment on an Issue.
         /// </summary>
         [EnumMember(Value = "ISSUE_COMMENT")]
@@ -144,16 +210,34 @@ namespace Octokit.GraphQL.Model
         CommentDeletedEvent,
 
         /// <summary>
+        /// Represents a 'connected' event on a given issue or pull request.
+        /// </summary>
+        [EnumMember(Value = "CONNECTED_EVENT")]
+        ConnectedEvent,
+
+        /// <summary>
         /// Represents a 'converted_note_to_issue' event on a given issue or pull request.
         /// </summary>
         [EnumMember(Value = "CONVERTED_NOTE_TO_ISSUE_EVENT")]
         ConvertedNoteToIssueEvent,
 
         /// <summary>
+        /// Represents a 'converted_to_discussion' event on a given issue.
+        /// </summary>
+        [EnumMember(Value = "CONVERTED_TO_DISCUSSION_EVENT")]
+        ConvertedToDiscussionEvent,
+
+        /// <summary>
         /// Represents a 'demilestoned' event on a given issue or pull request.
         /// </summary>
         [EnumMember(Value = "DEMILESTONED_EVENT")]
         DemilestonedEvent,
+
+        /// <summary>
+        /// Represents a 'disconnected' event on a given issue or pull request.
+        /// </summary>
+        [EnumMember(Value = "DISCONNECTED_EVENT")]
+        DisconnectedEvent,
 
         /// <summary>
         /// Represents a 'labeled' event on a given issue or pull request.
@@ -166,6 +250,12 @@ namespace Octokit.GraphQL.Model
         /// </summary>
         [EnumMember(Value = "LOCKED_EVENT")]
         LockedEvent,
+
+        /// <summary>
+        /// Represents a 'marked_as_duplicate' event on a given issue or pull request.
+        /// </summary>
+        [EnumMember(Value = "MARKED_AS_DUPLICATE_EVENT")]
+        MarkedAsDuplicateEvent,
 
         /// <summary>
         /// Represents a 'mentioned' event on a given issue or pull request.
@@ -244,6 +334,18 @@ namespace Octokit.GraphQL.Model
         /// </summary>
         [EnumMember(Value = "UNLOCKED_EVENT")]
         UnlockedEvent,
+
+        /// <summary>
+        /// Represents a 'user_blocked' event on a given user.
+        /// </summary>
+        [EnumMember(Value = "USER_BLOCKED_EVENT")]
+        UserBlockedEvent,
+
+        /// <summary>
+        /// Represents an 'unmarked_as_duplicate' event on a given issue or pull request.
+        /// </summary>
+        [EnumMember(Value = "UNMARKED_AS_DUPLICATE_EVENT")]
+        UnmarkedAsDuplicateEvent,
 
         /// <summary>
         /// Represents an 'unpinned' event on a given issue or pull request.

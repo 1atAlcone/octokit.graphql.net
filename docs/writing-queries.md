@@ -1,6 +1,6 @@
 # Writing Queries
 
-Note that this guide assumes you are familiar withthe  GraphQL query syntax. If you're not,
+Note that this guide assumes you are familiar with the GraphQL query syntax. If you're not,
 you can read more about it [here](https://graphql.org/learn/).
 
 ## The Root Query
@@ -76,7 +76,9 @@ var query = new Query()
     {
         r.Name,
         r.Description,
-        Issues = r.Issues(100, null, null, null, null, null, null).Select(i => new
+        Issues = r.Issues(100, null, null, null, null, null, null)
+        .Nodes
+        .Select(i => new
         {
             i.Number,
             i.Title,
@@ -155,7 +157,9 @@ var query = new Query()
     {
         r.Name,
         r.Description,
-        Issues = r.Issues(100, null, null, null, null, null, null).Select(i => new IssueModel
+        Issues = r.Issues(100, null, null, null, null, null, null)
+        .Nodes
+        .Select(i => new IssueModel
         {
             i.Number,
             i.Title,

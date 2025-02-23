@@ -26,7 +26,7 @@ namespace Octokit.GraphQL.Model
         public string BodyHTML { get; }
 
         /// <summary>
-        /// `true` if the object is closed (definition of closed may depend on type)
+        /// Indicates if the object is closed (definition of closed may depend on type)
         /// </summary>
         public bool Closed { get; }
 
@@ -59,6 +59,9 @@ namespace Octokit.GraphQL.Model
         /// </summary>
         public int? DatabaseId { get; }
 
+        /// <summary>
+        /// The Node ID of the Project object
+        /// </summary>
         public ID Id { get; }
 
         /// <summary>
@@ -72,7 +75,7 @@ namespace Octokit.GraphQL.Model
         public int Number { get; }
 
         /// <summary>
-        /// The project's owner. Currently limited to repositories and organizations.
+        /// The project's owner. Currently limited to repositories, organizations, and users.
         /// </summary>
         public IProjectOwner Owner => this.CreateProperty(x => x.Owner, Octokit.GraphQL.Model.Internal.StubIProjectOwner.Create);
 
@@ -85,6 +88,11 @@ namespace Octokit.GraphQL.Model
         /// <param name="before">Returns the elements in the list that come before the specified cursor.</param>
         /// <param name="archivedStates">A list of archived states to filter the cards by</param>
         public ProjectCardConnection PendingCards(Arg<int>? first = null, Arg<string>? after = null, Arg<int>? last = null, Arg<string>? before = null, Arg<IEnumerable<ProjectCardArchivedState?>>? archivedStates = null) => this.CreateMethodCall(x => x.PendingCards(first, after, last, before, archivedStates), Octokit.GraphQL.Model.ProjectCardConnection.Create);
+
+        /// <summary>
+        /// Project progress details.
+        /// </summary>
+        public ProjectProgress Progress => this.CreateProperty(x => x.Progress, Octokit.GraphQL.Model.ProjectProgress.Create);
 
         /// <summary>
         /// The HTTP path for this project
@@ -105,6 +113,16 @@ namespace Octokit.GraphQL.Model
         /// The HTTP URL for this project
         /// </summary>
         public string Url { get; }
+
+        /// <summary>
+        /// Indicates if the object can be closed by the viewer.
+        /// </summary>
+        public bool ViewerCanClose { get; }
+
+        /// <summary>
+        /// Indicates if the object can be reopened by the viewer.
+        /// </summary>
+        public bool ViewerCanReopen { get; }
 
         /// <summary>
         /// Check if the current viewer can update this object.

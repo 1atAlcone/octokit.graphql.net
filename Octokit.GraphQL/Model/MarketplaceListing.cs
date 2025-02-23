@@ -61,11 +61,6 @@ namespace Octokit.GraphQL.Model
         public string FullDescriptionHTML { get; }
 
         /// <summary>
-        /// Whether this listing has been submitted for review from GitHub for approval to be displayed in the Marketplace.
-        /// </summary>
-        public bool HasApprovalBeenRequested { get; }
-
-        /// <summary>
         /// Does this listing have any plans with a free trial?
         /// </summary>
         public bool HasPublishedFreeTrialPlans { get; }
@@ -74,6 +69,11 @@ namespace Octokit.GraphQL.Model
         /// Does this listing have a terms of service link?
         /// </summary>
         public bool HasTermsOfService { get; }
+
+        /// <summary>
+        /// Whether the creator of the app is a verified org
+        /// </summary>
+        public bool HasVerifiedOwner { get; }
 
         /// <summary>
         /// A technical description of how this app works with GitHub.
@@ -85,6 +85,9 @@ namespace Octokit.GraphQL.Model
         /// </summary>
         public string HowItWorksHTML { get; }
 
+        /// <summary>
+        /// The Node ID of the MarketplaceListing object
+        /// </summary>
         public ID Id { get; }
 
         /// <summary>
@@ -98,14 +101,9 @@ namespace Octokit.GraphQL.Model
         public bool InstalledForViewer { get; }
 
         /// <summary>
-        /// Whether this listing has been approved for display in the Marketplace.
-        /// </summary>
-        public bool IsApproved { get; }
-
-        /// <summary>
         /// Whether this listing has been removed from the Marketplace.
         /// </summary>
-        public bool IsDelisted { get; }
+        public bool IsArchived { get; }
 
         /// <summary>
         /// Whether this listing is still an editable draft that has not been submitted for review and is not publicly visible in the Marketplace.
@@ -118,9 +116,39 @@ namespace Octokit.GraphQL.Model
         public bool IsPaid { get; }
 
         /// <summary>
+        /// Whether this listing has been approved for display in the Marketplace.
+        /// </summary>
+        public bool IsPublic { get; }
+
+        /// <summary>
         /// Whether this listing has been rejected by GitHub for display in the Marketplace.
         /// </summary>
         public bool IsRejected { get; }
+
+        /// <summary>
+        /// Whether this listing has been approved for unverified display in the Marketplace.
+        /// </summary>
+        public bool IsUnverified { get; }
+
+        /// <summary>
+        /// Whether this draft listing has been submitted for review for approval to be unverified in the Marketplace.
+        /// </summary>
+        public bool IsUnverifiedPending { get; }
+
+        /// <summary>
+        /// Whether this draft listing has been submitted for review from GitHub for approval to be verified in the Marketplace.
+        /// </summary>
+        public bool IsVerificationPendingFromDraft { get; }
+
+        /// <summary>
+        /// Whether this unverified listing has been submitted for review from GitHub for approval to be verified in the Marketplace.
+        /// </summary>
+        public bool IsVerificationPendingFromUnverified { get; }
+
+        /// <summary>
+        /// Whether this listing has been approved for verified display in the Marketplace.
+        /// </summary>
+        public bool IsVerified { get; }
 
         /// <summary>
         /// The hex color code, without the leading '#', for the logo background.
@@ -154,7 +182,7 @@ namespace Octokit.GraphQL.Model
         public MarketplaceCategory PrimaryCategory => this.CreateProperty(x => x.PrimaryCategory, Octokit.GraphQL.Model.MarketplaceCategory.Create);
 
         /// <summary>
-        /// URL to the listing's privacy policy.
+        /// URL to the listing's privacy policy, may return an empty string for listings that do not require a privacy policy URL.
         /// </summary>
         public string PrivacyPolicyUrl { get; }
 
@@ -194,7 +222,7 @@ namespace Octokit.GraphQL.Model
         public string SupportEmail { get; }
 
         /// <summary>
-        /// Either a URL or an email address for support for this listing's app.
+        /// Either a URL or an email address for support for this listing's app, may return an empty string for listings that do not require a support URL.
         /// </summary>
         public string SupportUrl { get; }
 
@@ -253,7 +281,7 @@ namespace Octokit.GraphQL.Model
 
         /// <summary>
         /// Can the current viewer request this listing be reviewed for display in
-        /// the Marketplace.
+        /// the Marketplace as verified.
         /// </summary>
         public bool ViewerCanRequestApproval { get; }
 
